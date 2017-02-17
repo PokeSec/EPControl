@@ -2,7 +2,7 @@ EPControl
 ===
 Windows agent
 
-[![Build status](https://ci.appveyor.com/api/projects/status/dofneca8p5c6inqo?svg=true)](https://ci.appveyor.com/project/jbgalet/epcontrol)
+[![Build status](https://ci.appveyor.com/api/projects/status/ug3y8k46yjg4htg4?svg=true)](https://ci.appveyor.com/project/jbgalet/epcontrol)
 
 Installation instructions
 ---
