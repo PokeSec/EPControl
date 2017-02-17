@@ -1,0 +1,46 @@
+stages:
+  - build
+  - deploy
+
+x86:
+  stage: build
+  script:
+    - python config_signer.py config_priv.pem settings-prod.json settings.json
+    - build.bat x86
+  artifacts:
+    paths:
+      - dist/*.msi
+    expire_in: 1 week
+  tags:
+    - windows
+
+x64:
+  stage: build
+  script:
+    - python config_signer.py config_priv.pem settings-prod.json settings.json
+    - build.bat x64
+  artifacts:
+    paths:
+      - dist/*.msi
+    expire_in: 1 week
+  tags:
+    - windows
+
+deploydev:
+  stage: deploy
+  script:
+    - python3 deploy.py
+  tags:
+    - deploy
+    - dev
+
+deployprod:
+  stage: deploy
+  script:
+    - python3 deploy.py
+    - python3 /srv/scripts/deploy_pkg.py
+  when: manual
+  environment:
+    name: production
+  tags:
+    - deploy_prod

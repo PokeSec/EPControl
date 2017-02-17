@@ -1,0 +1,22 @@
+version: 0.0.{build}
+clone_folder: C:\DEV\EPControl
+build_script:
+- cmd: >-
+    cd C:\DEV\EPControl
+
+    build.bat x86
+
+
+    cd C:\DEV\EPControl
+
+    build.bat x64
+artifacts:
+- path: dist/*.msi
+  name: msi
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: WUWVUc6xnfZZFC4/TqHWdgJZJ8ZvwU1AMzXHpme1GgF31YsTF1pMATidUafIq+K3
+  artifact: msi
+  on:
+    APPVEYOR_REPO_TAG: true

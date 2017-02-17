@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <?if $(var.Platform) = x64 ?>
+    <?define Win64 = "yes" ?>
+    <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+    <?else ?>
+    <?define Win64 = "no" ?>
+    <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
+    <?endif ?>
+    <Product Id="*" Name="EPControl" Language="1033" Version="$(var.version)" Manufacturer="EPControl"
+             UpgradeCode="556056ef-4028-434f-a1c3-12b7fc72a4bd">
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
+
+        <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A newer version of [ProductName] is already installed."/>
+        <MediaTemplate EmbedCab="yes" CompressionLevel="high"/>
+
+        <!--Icon-->
+        <!-- <Icon Id="product.ico" SourceFile="product.ico "/> -->
+        <!-- <Property Id="ARPPRODUCTICON" Value="product.ico"/> -->
+        <Property Id="CLIENT_TOKEN" Admin="yes"/>
+        <Property Id="PROXY" Admin="yes"/>
+
+        <Feature Id="ProductFeature" Title="EPControl" Level="1">
+            <ComponentGroupRef Id="ProductComponents"/>
+        </Feature>
+        <Feature Id="VCRedist" Title="Visual C++ 2015 Runtime" AllowAdvertise="no" Display="hidden" Level="1">
+            <MergeRef Id="VCRedist"/>
+        </Feature>
+
+        <CustomAction Id="EPC_ConfigureApp_Cmdline"
+                      Property="EPC_ConfigureApp"
+                      Value="&quot;[INSTALLFOLDER]epcontrol.exe&quot; configure --token=[CLIENT_TOKEN] --proxy=[PROXY]"/>
+        <CustomAction Id="EPC_ConfigureApp"
+                      BinaryKey="WixCA"
+                      DllEntry="WixQuietExec"
+                      Impersonate="no"
+                      Return="check"
+                      Execute="deferred"
+        />
+        <InstallExecuteSequence>
+            <Custom Action='EPC_ConfigureApp_Cmdline' Before='EPC_ConfigureApp'>NOT Installed AND NOT REMOVE</Custom>
+            <Custom Action='EPC_ConfigureApp' Before='StartServices'>NOT Installed AND NOT REMOVE</Custom>
+        </InstallExecuteSequence>
+    </Product>
+
+    <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="$(var.PlatformProgramFilesFolder)">
+                <Directory Id="MANUFACTURER_FOLDER" Name="EPControl">
+                    <Directory Id="INSTALLFOLDER" Name="EPControl"/>
+                </Directory>
+            </Directory>
+        </Directory>
+    </Fragment>
+
+    <Fragment>
+        <DirectoryRef Id="TARGETDIR">
+            <Merge Id="VCRedist"
+                   SourceFile="C:\Program Files (x86)\Common Files\Merge Modules\Microsoft_VC140_CRT_$(var.Platform).msm"
+                   DiskId="1" Language="0"/>
+        </DirectoryRef>
+    </Fragment>
+
+    <Fragment>
+        <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+            <ComponentGroupRef Id="EPControlComponent"/>
+        </ComponentGroup>
+    </Fragment>
+</Wix>

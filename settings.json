@@ -1,0 +1,100 @@
+{
+  "EXTRA_CONFIG": [
+    {
+      "file": "user-settings.json",
+      "type": "user",
+      "parameters": [
+        "ROUTE_URL",
+        "AGENT_TOKEN",
+        "INSTANCE_ID",
+        "PROXIES",
+        "SENTRY_DSN"
+      ]
+    }
+  ],
+  "PLATFORM": "win32",
+  "CA_CERTIFICATE": "trust.pem",
+  "SIGN_PUBKEY": "sign.pem",
+  "CACHE_DIR": "cache",
+  "CACHE_SETTINGS": {
+    "default_expiration": 86400,
+    "eviction_policy": "least-recently-stored"
+  },
+  "BINCACHE_DIR": "binlib_cache",
+  "TASK_POLL": 300,
+  "STOP_TRIES": 5,
+  "BINARY_MODULE_EXT": "pyd",
+  "SERVICE_NAME": "EPControl",
+  "SERVICE_DISPLAYNAME": "EPControl",
+  "SERVICE_EXE": "EPControl.exe",
+  "SERVICE_DESCRIPTION": "EPControl service",
+  "WORKER_TERMINATE_GRACE": 10,
+  "LOGGER_CONF": {
+    "version": 1,
+    "disable_existing_loggers": true,
+    "formatters": {
+      "detailed": {
+        "class": "logging.Formatter",
+        "format": "%(asctime)s %(name)-15s %(levelname)-8s %(processName)-10s %(message)s"
+      },
+      "simple": {
+        "class": "logging.Formatter",
+        "format": "%(name)-15s %(levelname)-8s %(processName)-10s %(message)s"
+      }
+    },
+    "handlers": {
+      "file": {
+        "class": "epc.common.log.TimedRotatingFileHandler",
+        "filename": "logs/epcontrol.log",
+        "when": "midnight",
+        "backupCount": 7,
+        "formatter": "detailed",
+        "level": "INFO"
+      },
+      "updaterlog": {
+        "class": "epc.common.log.TimedRotatingFileHandler",
+        "filename": "logs/updater.log",
+        "when": "midnight",
+        "backupCount": 7,
+        "formatter": "detailed",
+        "level": "DEBUG"
+      },
+      "iocscanlog": {
+        "class": "epc.common.log.TimedRotatingFileHandler",
+        "filename": "logs/iocscan.log",
+        "when": "midnight",
+        "backupCount": 7,
+        "formatter": "detailed"
+      },
+      "console_info": {
+        "class": "logging.StreamHandler",
+        "formatter": "simple",
+        "level": "INFO"
+      },
+      "console_debug": {
+        "class": "logging.StreamHandler",
+        "formatter": "simple",
+        "level": "DEBUG"
+      }
+    },
+    "loggers": {
+      "updater": {
+        "handlers": [
+          "updaterlog"
+        ]
+      },
+      "iocscan": {
+        "handlers": [
+          "iocscanlog"
+        ]
+      }
+    },
+    "root": {
+      "handlers": [
+        "console_debug",
+        "file"
+      ],
+      "level": "DEBUG"
+    }
+  }
+}
