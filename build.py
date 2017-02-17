@@ -268,8 +268,8 @@ class WinPkgBuilder(object):
         os.chdir(str(BUILD_DIR))
         # Download agentlib wheel
         with urllib.request.urlopen(
-            "https://github.com/PokeSec/agentlib/releases/download/{0}/agentlib-{0}-py3-none-win32.whl".format(AGENTLIB_VERSION)) as conn:
-            with open(str(BUILD_DIR / 'agentlib-{}-py3-none-win32.whl'.format(AGENTLIB_VERSION)), 'wb') as ofile:
+            "https://github.com/PokeSec/agentlib/releases/download/{0}/agentlib_win32-{0}-py3-none-any.whl".format(AGENTLIB_VERSION)) as conn:
+            with open(str(BUILD_DIR / 'agentlib_win32-{0}-py3-none-any.whl'.format(AGENTLIB_VERSION)), 'wb') as ofile:
                 ofile.write(conn.read())
 
                 # Install agentlib wheel
@@ -277,7 +277,7 @@ class WinPkgBuilder(object):
                     venv_py,
                     '-m', 'pip',
                     'install',
-                    str(BUILD_DIR / 'agentlib-{}-py3-none-win32.whl'.format(AGENTLIB_VERSION)),
+                    str(BUILD_DIR / 'agentlib_win32-{0}-py3-none-any.whl'.format(AGENTLIB_VERSION)),
                 ]):
                     raise RuntimeError("Cannot install agentlib")
 
